@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Mail;
+use App\Jobs\JobMail;
 use Illuminate\Http\Request;
+use Log;
+use Illuminate\Support\Facades\Mail;
 
 class MailController extends Controller
 {
@@ -11,9 +13,8 @@ class MailController extends Controller
     $file = $request->input('link');
     $email = $request->input('email');  
 
-    $result = exec('python C:\xampp\htdocs\temp\temp\script.py ' .$file);
     // Проверка на валидный url
-    if (!filter_var($result, FILTER_VALIDATE_URL)) {
+    if (!filter_var($file, FILTER_VALIDATE_URL)) {
         echo "<h4>Unsupported url. Please try again!</h4>";
         return view('welcome');
     }
@@ -22,15 +23,23 @@ class MailController extends Controller
         echo "<h4>Invalid email address. Please try again!</h4>";
         return view('welcome');
     }
+    
+    
+    Log::info("Request Cycle with Queues Begins");
+    $this->dispatch(new JobMail($email, $file)); 
 
+   
+    
+    /* $result = exec('python C:\xampp\htdocs\temp\temp\script.py ' .$file);
     $data = array('email' => $email, 'file' => $result);  
     Mail::send('email.welcome', $data, function($message) use ($email)
     {
         $message->to($email)
         ->subject('Link for a video download');
-    });
-
-    return view('success');
+    }); */
     
+    Log::info("Request Cycle with Queues Ends");
+    
+    return view('success');
     }
 }
