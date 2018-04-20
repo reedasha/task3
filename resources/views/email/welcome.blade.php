@@ -20,7 +20,7 @@
     <p>
         You requested to download audio version of the video. Below you will find a link to the download. <br>
         Thanks for using our services!
-        <a href='ftp://localhost/htdocs/temp/temp/public/{{ $file }}'><h2>Click</h2></a>
+        <a href='{{ $file }}'><h2>Click</h2></a>
     <p>
 Best Regards
 </body>

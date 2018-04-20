@@ -26,10 +26,12 @@ class MailController extends Controller
     
     
     Log::info("Request Cycle with Queues Begins");
-    $this->dispatch(new JobMail($email, $file)); 
 
-   
+    //asynchronous sending
+    $this->dispatch(new JobMail($email, $file)); 
     
+    //synchronous sending
+
     /* $result = exec('python C:\xampp\htdocs\temp\temp\script.py ' .$file);
     $data = array('email' => $email, 'file' => $result);  
     Mail::send('email.welcome', $data, function($message) use ($email)

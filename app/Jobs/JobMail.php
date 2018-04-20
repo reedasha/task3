@@ -35,46 +35,11 @@ class JobMail implements ShouldQueue
      */
     public function handle()
     {
-        function createZip($files, $zip_file) {
-        // PHP-MySQL Course - http://coursesweb.net/php-mysql/
-        // create an object of the ZipArchive class
-        $zip = new ZipArchive;
-    
-        // if the $zip_file can be created, traverse the array $files and add each file in archive
-        if($zip->open($zip_file, ZipArchive::CREATE) === TRUE) {
-
-            //Delete the existing files in the archive
-            if($zip->count() > 0) {
-                $num = $zip->count();
-                for($i = 0; $i < $num; $i++) {
-                    $zip->deleteIndex($i);
-                }
-            }
-
-            $zip->addFile($files);
-
-            $zip->close();
-            return true;
-        }
-        else return false;
-        }
-
+        $result = exec('python C:\xampp\htdocs\temp\temp\script.py ' .$this->file);  
+ 
+        $path = asset('storage/' .$result);
         
-        $result = exec('python C:\xampp\htdocs\temp\temp\script.py ' .$this->file);
-
-        /* Example */
-
-        // Array with the path-name of the files to be added in ZIP archive
-        $files = $result;
-
-        // the path-name of your final zip file on your server
-        $zip_file = 'final.zip';
-
-        // calls the createZip() to create the ZIP archive, returns message of success or failure
-        if(createZip($files, $zip_file)) echo 'The '. $zip_file. ' successfully created';
-        else echo 'Unable to create the '. $zip_file. ' file';
-
-        $data = array('email' => $this->email, 'file' => $zip_file);
+        $data = array('email' => $this->email, 'file' => $path);
         Mail::send('email.welcome', $data, function($message) use ($data)
         {
             $message->to($data['email'])
