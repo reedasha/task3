@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_DRIVER', 'sync'),
+    'default' => env('QUEUE_DRIVER', 'redis'),
 
     /*
     |--------------------------------------------------------------------------
@@ -30,6 +30,14 @@ return [
 
     'connections' => [
 
+       /*  'gearman' => [
+        'driver' => 'gearman',
+        'host'   => 'localhost',
+        'queue'  => 'default',
+        'port'   => 4730,
+        'timeout' => 1000 //milliseconds
+        ],
+ */
         'sync' => [
             'driver' => 'sync',
         ],

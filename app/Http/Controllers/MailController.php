@@ -5,6 +5,7 @@ use App\Jobs\JobMail;
 use Illuminate\Http\Request;
 use Log;
 use Illuminate\Support\Facades\Mail;
+use Redis;
 
 class MailController extends Controller
 {
@@ -28,10 +29,10 @@ class MailController extends Controller
     Log::info("Request Cycle with Queues Begins");
 
     //asynchronous sending
-    $this->dispatch(new JobMail($email, $file)); 
+    $queue = $this->dispatch(new JobMail($email, $file)); 
     
     //synchronous sending
-
+    
     /* $result = exec('python C:\xampp\htdocs\temp\temp\script.py ' .$file);
     $data = array('email' => $email, 'file' => $result);  
     Mail::send('email.welcome', $data, function($message) use ($email)

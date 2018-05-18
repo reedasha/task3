@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
 use Illuminate\Support\Facades\Mail;
-use ZipArchive;
+use Log;
 
 class JobMail implements ShouldQueue
 {
@@ -36,8 +36,9 @@ class JobMail implements ShouldQueue
     public function handle()
     {
         $result = exec('python C:\xampp\htdocs\temp\temp\script.py ' .$this->file);  
- 
-        $path = asset('storage/' .$result);
+        
+        $path = 'http://localhost:8000/storage/' .$result;
+        Log:info($path);
         
         $data = array('email' => $this->email, 'file' => $path);
         Mail::send('email.welcome', $data, function($message) use ($data)
