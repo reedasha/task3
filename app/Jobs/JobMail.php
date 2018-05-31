@@ -35,10 +35,10 @@ class JobMail implements ShouldQueue
      */
     public function handle()
     {
-        $result = exec('python C:\xampp\htdocs\temp\temp\script.py ' .$this->file);  
-        
-        $path = 'http://localhost:8000/storage/' .$result;
-        Log:info($path);
+        $result = exec('python /var/www/script.py ' .$this->file);  
+
+        $path = 'http://localhost:9898/storage/' .$result;
+        Log:info($result);
         
         $data = array('email' => $this->email, 'file' => $path);
         Mail::send('email.welcome', $data, function($message) use ($data)
